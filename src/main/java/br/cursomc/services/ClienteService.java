@@ -11,9 +11,11 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.licensemanager.model.AuthorizationException;
 
+import java.net.URI;
 import br.cursomc.domain.Cidade;
 import br.cursomc.domain.Cliente;
 import br.cursomc.domain.Endereco;
@@ -40,17 +42,17 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
-	/*	@Autowired
+	@Autowired
 	private S3Service s3Service;
 
-    @Autowired
+ /*   @Autowired
 	private ImageService imageService; 
 
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
 
 	@Value("${img.profile.size}")
-	private Integer size; */
+	private Integer size;*/
 
 	public Cliente find(Integer id) {
 
@@ -136,13 +138,17 @@ public class ClienteService {
 		newObj.setEmail(obj.getEmail());
 	}
 
-	/*	public URI uploadProfilePicture(MultipartFile multipartFile) {
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
+	}
+	
+		/* public URI uploadProfilePicture(MultipartFile multipartFile) {
 		UserSS user = UserService.authenticated();
 		if (user == null) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
-	 	BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
 		jpgImage = imageService.cropSquare(jpgImage);
 		jpgImage = imageService.resize(jpgImage, size);
 
